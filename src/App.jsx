@@ -5,7 +5,10 @@ import { TodoInput } from "./components/TodoInput";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [todos, setTodos] = useState([{ id: 1, input: "Hello! Add your first todo!", complete: true }])
+  const [todos, setTodos] = useState(()=>{
+    const savedTodos = localStorage.getItem("todos");
+    return savedTodos ? JSON.parse(savedTodos) : [{ id: 1, input: "Hello! Add your first todo!", complete: true }]
+  })
     
   const [tab, setTab] = useState("All");
 
@@ -25,7 +28,11 @@ function App() {
   const handleDeleteTodo = (todoId) =>
     setTodos((todos) => todos.filter((todo) => todo.id !== todoId));
 
-  const handleSetTab = (tab) => setTab(tab)
+  const handleSetTab = (tab) => setTab(tab);
+
+  useEffect(()=>{
+localStorage.setItem("todos", JSON.stringify(todos))
+  },[todos])
 
   return (
     <>
